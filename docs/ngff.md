@@ -28,7 +28,7 @@ flowchart LR
         image("Image data<br>(voxels)"):::blue --> layers
         size("Pixel size<br>(w,h,d)"):::yellow --> layers
         coords("Coordinates<br>(x,y,z)"):::yellow --> layers
-        transforms("Transforms<br>[]"):::yellow --> layers
+        transforms("Transforms<br>[...]"):::yellow --> layers
     end
 
     %% Styles
