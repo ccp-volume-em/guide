@@ -1,13 +1,16 @@
 # Next Generation File Format (NGFF)
 
-The commonly used term Next Generation File Format (NGFF) refers to the OME-Zarr file format developed by the Open Microscopy Environment (OME) for storing and sharing large bioimaging datasets.
+The commonly used term Next Generation File Format (NGFF) refers to the OME-Zarr file format
+which is a Open Microscopy Environment (OME) community-lead format, for storing and sharing large bioimaging datasets.
 
-See this [Comparison of OME-Zarr libs](https://github.com/ome/ome-zarr-py/issues/407) including examples of each of the Python packages.
+See the [Comparison of OME-Zarr libs](https://github.com/ome/ome-zarr-py/issues/407) including examples of each of the Python packages.
 
 The textbook [An Introduction to OME-Zarr for Big Bioimaging Data](https://ome-zarr-book.readthedocs.io/) gives a great overview of the NGFF/OME-Zarr format and how to use it in Python.
 This is using the ome-zarr-models and pydantic-ome-ngff, as well as the core zarr-python package.
 
-We recommend the use of persistent metadata together with the image data in [dask](https://docs.dask.org/) format.
+We recommend the use of persistent metadata, together with the image data in [dask](https://docs.dask.org/) format.
+The metadata can be persisted in memory by using [Spatial Images](https://github.com/spatial-image/spatial-image)
+which are based on [Xarrays](https://docs.xarray.dev/).
 
 ## Persistent metadata
 
