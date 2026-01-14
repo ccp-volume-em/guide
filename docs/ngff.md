@@ -3,16 +3,19 @@
 The commonly used term Next Generation File Format (NGFF) refers to the OME-Zarr file format
 which is a Open Microscopy Environment (OME) community-lead format, for storing and sharing large bioimaging datasets.
 
-See the [Comparison of OME-Zarr libs](https://github.com/ome/ome-zarr-py/issues/407) including examples of each of the Python packages.
+## Comparison of OME-Zarr libs
+There are a number of python packages providing good support for the OME-Zarr format. 
+See the [Comparison of OME-Zarr libs](https://github.com/ome/ome-zarr-py/issues/407) including examples of each of the python packages.
 
+## An Introduction to OME-Zarr for Big Bioimaging Data
 The textbook [An Introduction to OME-Zarr for Big Bioimaging Data](https://ome-zarr-book.readthedocs.io/) gives a great overview of the NGFF/OME-Zarr format and how to use it in Python.
 This is using the ome-zarr-models and pydantic-ome-ngff, as well as the core zarr-python package.
+
+## Persistent metadata
 
 We recommend the use of persistent metadata, together with the image data in [dask](https://docs.dask.org/) format.
 The metadata can be persisted in memory by using [Spatial Images](https://github.com/spatial-image/spatial-image)
 which are based on [Xarrays](https://docs.xarray.dev/).
-
-## Persistent metadata
 
 ```mermaid
 ---
@@ -49,6 +52,8 @@ This metadata is persisted through the OME-Zarr format.
 
 ## Basic example reading OME-Zarr
 
+This is a basic example of reading plain image OME-Zarr data from a remote URL using the [ome-zarr python package](https://github.com/ome/ome-zarr-py).
+
 ```python
 from ome_zarr.io import parse_url
 from ome_zarr.reader import Reader
@@ -74,6 +79,9 @@ axes = "".join([axis["name"] for axis in metadata["axes"]])
 
 
 ## Basic example writing OME-Zarr
+
+This is a basic example of writing plain image OME-Zarr data to local file using the [ome-zarr python package](https://github.com/ome/ome-zarr-py).
+The zarr file is automatically created with metadata and pyramid scales.
 
 ```python
 import zarr
