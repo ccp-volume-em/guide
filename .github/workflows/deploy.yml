@@ -1,23 +1,31 @@
-name: Deploy
+name: build-docs
 on:
   push:
     branches:
-      - main
+    - main
+  pull_request:
+    branches:
+    - main
+
+permissions:
+  contents: write
 jobs:
-  build:
-    name: Deploy docs to GitHub Pages
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build
-        uses: Tiryoh/actions-mkdocs@v0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          mkdocs_version: 'latest'
-          requirements: 'docs/requirements.txt'
-          configfile: 'mkdocs.yml'
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+          python-version: 3.x
+      - run: echo "cache_id=$(date --utc '+%V')" >> $GITHUB_ENV
+      - uses: actions/cache@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
+          key: mkdocs-material-${{ env.cache_id }}
+          path: ~/.cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install mkdocs-material[imaging]
+      - run: mkdocs build --config-file mkdocs.yml
+        if: github.ref != 'refs/heads/main'
+      - run: mkdocs gh-deploy --config-file mkdocs.yml --force
+        if: github.ref == 'refs/heads/main'
