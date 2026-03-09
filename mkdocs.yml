@@ -17,7 +17,8 @@ markdown_extensions:
 
 nav:
   - index.md
-  - overview.md
+  - software.md
+  - plugins.md
   - ngff.md
 
 theme:
