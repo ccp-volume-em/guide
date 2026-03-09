@@ -5,7 +5,7 @@ For collaborative software development, we recommend using the following:
 ## Collaborative development
 
 ### Platform
-Use a cloud platform (e.g. [GitHub](github.com)), using repositories for code and documentation, project management and communication.
+Use a cloud platform (e.g. [GitHub](https://github.com)), using repositories for code and documentation, project management and communication.
 We also recommend using github Issues so users can report issues and bugs, feature-level branching and Pull Requests.
 
 ### Version control
