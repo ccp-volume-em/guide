@@ -3,7 +3,7 @@ Well-written tests ensure your plugin is maintainable for future developers, and
 We recommend using PyTest to write tests for plugins, please refer to the documentation: https://docs.pytest.org/en/stable/getting-started.html
 
 ## Installation Tests
-Installation tests can involve checking our package was installed in the current environment, and that the module can be imported without errors.
+Installation tests are used to check our package was installed in the current environment, and that the module can be imported without errors.
 
 ### Test: Package is installed and detected by Python:
 ```
