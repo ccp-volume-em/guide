@@ -51,9 +51,10 @@ Besides Github Issues, for further user support we recomment connecting to a sin
 This also allows the community to support each other and share knowledge.
 
 ## Further resources
-- [ARC python tooling](https://github-pages.arc.ucl.ac.uk/python-tooling/) - a collection of resources for python tooling
-- [Turing way book](https://book.the-turing-way.org) - a comprehensive guide to reproducible data science, including software development and documentation
-- [Git software carpentry](https://swcarpentry.github.io/git-novice/) - a tutorial on using git for version control
-- [Carpentries Incubator](https://carpentries-incubator.github.io/python-intermediate-development/) - a tutorial on intermediate python development, including testing and documentation
-- [Docker documentation](https://docs.docker.com/) - documentation on using Docker for containerization
+- A collection of resources for python tooling: [ARC python tooling](https://github-pages.arc.ucl.ac.uk/python-tooling/)
+- A comprehensive guide to reproducible data science, including software development and documentation: [Turing way book](https://book.the-turing-way.org)
+- A tutorial on using git for version control: [Git software carpentry](https://swcarpentry.github.io/git-novice/)
+- A tutorial on intermediate python development, including testing and documentation: [Carpentries Incubator](https://carpentries-incubator.github.io/python-intermediate-development/)
+- Documentation on using Docker for containerization: [Docker documentation](https://docs.docker.com/)
 
+- CCP-volumeEM: Good practices for image analysis software with Dr Kimberly Meechan [YouTube video](https://www.youtube.com/watch?v=HHJJZ79KC4Y)
