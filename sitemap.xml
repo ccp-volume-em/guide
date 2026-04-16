@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://ccp-volume-em.github.io/guide/</loc>
+         <lastmod>2026-04-16</lastmod>
+    </url>
+    <url>
+         <loc>https://ccp-volume-em.github.io/guide/ngff/</loc>
+         <lastmod>2026-04-16</lastmod>
+    </url>
+    <url>
+         <loc>https://ccp-volume-em.github.io/guide/plugins/</loc>
+         <lastmod>2026-04-16</lastmod>
+    </url>
+    <url>
+         <loc>https://ccp-volume-em.github.io/guide/software/</loc>
+         <lastmod>2026-04-16</lastmod>
+    </url>
+</urlset>
