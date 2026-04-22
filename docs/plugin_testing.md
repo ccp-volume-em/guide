@@ -95,52 +95,13 @@ collecting ... collected 1 items
 tests/test_installation.py::test_cuda_usable SKIPPED (No GPU available)
 ```
  
-##Note For Containers:
-If your plugin will be packaged within a container, below are examples of extra tests we recommend: 
-
-### Test: The DISPLAY env variable is set and the Napari GUI works
-```
-def test_display_set():
-    import os
-    if os.getenv("GITHUB_ACTIONS") == "true":
-        pytest.skip("Skipping in GitHub Actions")
-    if not os.environ.get("DISPLAY"):
-        pytest.fail("DISPLAY unset - napari GUI unavailable")
-```
-Often, users will run a container on a remote machine or HPC cluster. In order to run the Napari GUI on the host system, the `$DISPLAY` variable needs to be set, which is what this test verifies. 
-
-
-### Test: The container has read/write access the main filesystem
-```
-def test_host_mounts_accessible():
-    # Non-User Filesystems and mount points that existed in Linux docker container
-    # Transferability to other runtimes and host systems not guaranteed
-    EXCLUDE_FSTYPES = {"overlay", "proc", "tmpfs", "devpts", "sysfs",
-                       "cgroup", "cgroup2", "mqueue", "devtmpfs"}
-    EXCLUDE_MOUNTPOINTS = re.compile(r"^(/etc/|/proc|/sys|/dev)")
-    with open("/proc/mounts") as f:
-        for line in f:
-            _, mountpoint, fstype, *_ = line.split()
-            if fstype in EXCLUDE_FSTYPES:
-                continue
-            if EXCLUDE_MOUNTPOINTS.match(mountpoint):
-                continue
-            # Check read access (N.B. moot if container run as root)
-            if not os.access(mountpoint, os.R_OK):
-                warnings.warn(f"Mountpoint {mountpoint} ({fstype}) is not readable")
-                continue
-            # Check write access
-            if not os.access(mountpoint, os.R_OK):
-                warnings.warn(f"Mountpoint {mountpoint} ({fstype}) is not writeable")
-                continue
-            return  # plausible filesystem r+w mount 
-    pytest.fail(
-        "No host filesystems detected with read+write access"
-        "You may need to bind mount data with -v /host/path:/container/path"
-    )
-```
-
-When running Napari and the plugin in a container, the host's filesystem needs to be accessible so the plugin can read the user's data. This test checks the container's `/proc/mounts` list shows read/write access to the mounted filesystem.
+## Note For Container Builds:
+If your plugin will be included in a container image, it may be appropriate to
+perform additional installation-type tests during the start-up of the container&mdash;see
+[Container Testing](container_testing.md) for examples. We also advise building
+the container locally and manually checking your plugin works at
+least once during development, in case there are unexpected environment or path
+changes in the containerisation that affect your plugin. 
 
 ## Unit Tests
 Unit tests are written to make sure that each function returns an expected output, given a particular input. This should be the case regardless of the actual implementation of the function.
@@ -258,3 +219,58 @@ open htmlcov/index.html
 ```
 
 The report will show line-by-line what is being tested, and what is being missed. Ideally, we want everything covered by our tests. If you have lines that you know never need to be tested (like debugging code) you can omit specific lines from coverage with the comment ```# pragma: no cover```
+
+## Testing Automation (GitHub Workflow)
+Testing can be performed automatically on changes to a GitHub repository by
+creating a GitHub *Workflow*, defining a test *job* a yaml file
+`.github/workflows/test.yml`. Note the equivalent feature in GitLab is called a
+GitLab *pipeline*, and is defined by a `.gitlab-ci.ml` file in the root of the
+repository. Below is an example configuration where testing is performed for the
+Empanada Napari plugin against Linux, Mac and Windows runners (virtual machines
+hosted by GitHub), and for each a series of Python versions:
+
+```
+name: Run pytests for target platforms and Python versions
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+
+  test:
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        shell: bash
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install napari[all]
+          python -m pip install .[test]
+
+      - name: Run tests
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: python -m pytest -s -vv tests --ignore=tests/test_install.py
+```
+An complete introduction to Workflows can be found on the [GitHub Actions
+documentation](https://docs.github.com/en/actions/concepts/workflows-and-actions/workflows).
+Here we note a few key features:
+- the workflow is specified to run on `push` to *any* branch, but many other
+  'trigger' events are possible (push to `main` / PR merger is common for build
+steps)
+- the job consists of a number of `steps`, several of which use 
+'GitHub Actions', which provide pre-defined functionality in one conveinent call 
+- the pipeline builds the package locally (with `[test]` dependencies), and runs
+  all but a set of installation tests (these were designed for the container images)  
+
