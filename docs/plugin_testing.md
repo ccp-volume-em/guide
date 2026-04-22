@@ -98,7 +98,7 @@ tests/test_installation.py::test_cuda_usable SKIPPED (No GPU available)
 ## Note For Container Builds:
 If your plugin will be included in a container image, it may be appropriate to
 perform additional installation-type tests during the start-up of the container&mdash;see
-[Container Testing](container_testing.md) for examples. We also advise building
+[Container Testing](container_testing.md). We also advise building
 the container locally and manually checking your plugin works at
 least once during development, in case there are unexpected environment or path
 changes in the containerisation that affect your plugin. 
@@ -270,7 +270,7 @@ Here we note a few key features:
   'trigger' events are possible (push to `main` / PR merger is common for build
 steps)
 - the job consists of a number of `steps`, several of which use 
-'GitHub Actions', which provide pre-defined functionality in one conveinent call 
+GitHub *Actions* that provide pre-defined functionality in one convenient call 
 - the pipeline builds the package locally (with `[test]` dependencies), and runs
   all but a set of installation tests (these were designed for the container images)  
 
