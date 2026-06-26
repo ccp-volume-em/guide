@@ -19,6 +19,8 @@ nav:
   - index.md
   - software.md
   - plugins.md
+  - plugin_testing.md
+  - container_testing.md
   - ngff.md
 
 theme:
