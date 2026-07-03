@@ -17,11 +17,14 @@ markdown_extensions:
 
 nav:
   - index.md
+  - fair.md
+  - green.md
   - software.md
   - plugins.md
   - plugin_testing.md
   - container_testing.md
   - ngff.md
+  - muvis-align.md
 
 theme:
   name: material

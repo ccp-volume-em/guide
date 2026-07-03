@@ -4,4 +4,4 @@ For napari plugin development, we recommend following the official napari plugin
 This includes a guided setup process for your plugin, facilitating setting up testing and GitHub actions.
 Additionally, detailed instructions on best practice in terms of implementation are provided in the guide.
 
-https://napari.org/stable/plugins/building_a_plugin/index.html
+[napari.org/stable/plugins/building_a_plugin](https://napari.org/stable/plugins/building_a_plugin/index.html)
