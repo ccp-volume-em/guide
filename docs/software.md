@@ -33,7 +33,7 @@ Here it's more important to describe the function and to explain the why questio
 Inline comments are useful anywhere where it's not intuitively obvious from code what or why something is done.
 
 ## Containerization
-For reproducibility and ease of installation, we recommend using creating containers (e.g. [Docker](https://www.docker.com/)) to create a consistent environment for users.
+For reproducibility and ease of installation, we recommend using containers (e.g. [Docker](https://www.docker.com/)) to create a consistent environment for users.
 
 ## Testing
 For python testing we recommend using [pytest](https://docs.pytest.org/) together with [tox](https://tox.wiki/) and connecting this with an automated GitHub Action triggered by a pull request, push or release.
