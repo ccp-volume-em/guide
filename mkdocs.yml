@@ -20,6 +20,7 @@ nav:
   - fair.md
   - green.md
   - software.md
+  - software_publishing.md
   - plugins.md
   - plugin_testing.md
   - container_testing.md
