@@ -495,3 +495,4 @@ CMD echo "Launching napari on Xpra. Connect via http://localhost:$XPRA_PORT or $
 | Performance metrics     | NCC, SSIM, ONMI, MSE-derived score, match metrics, timing logs              |
 | Resumable workflow      | state machine, pair mappings, global mappings, metrics JSON                 |
 | Xpra interface          | Docker stage exposing browser-based napari over Xpra                        |
+
