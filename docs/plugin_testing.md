@@ -1,6 +1,6 @@
 # Writing Tests For Plugins
 Well-written tests ensure your plugin is maintainable for future developers, and help locate the source of issues a user might encounter.
-We recommend using PyTest to write tests for plugins, please refer to the documentation: https://docs.pytest.org/en/stable/getting-started.html
+We recommend using PyTest to write tests for plugins, please refer to the documentation: [pytest/getting-started](https://docs.pytest.org/en/stable/getting-started.html)
 
 ## Installation Tests
 Installation tests are used to check our package was installed in the current environment, and that the module can be imported without errors.
