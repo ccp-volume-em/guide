@@ -11,6 +11,7 @@ Practical recommendations include:
 * Assign persistent identifiers to datasets and published outputs.
 * Maintain a consistent project structure so that raw data, processed data, analyses, and documentation can be located easily.
 * Include metadata describing relationships between datasets, workflows, and derived results.
+* Use NGFF OME-Zarr format which includes standardized metadata, also supporting efficient metadata exploration for large datasets.
 * Use RO-Crate metadata as a single entry point to datasets, workflows, software, and documentation.
 
 Relevant resources:

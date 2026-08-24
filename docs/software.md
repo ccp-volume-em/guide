@@ -50,6 +50,11 @@ There are tools for automated dependency updates, such as [Dependabot](https://g
 Besides Github Issues, for further user support we recomment connecting to a single suitable community forum (e.g. [image.sc](https://forum.image.sc/) for image analysis related software) and providing a link to this forum in the documentation.
 This also allows the community to support each other and share knowledge.
 
+## AI use
+
+Modern software development currently often includes the use of generative-AI tools, where benefits should be weighed against maintainability and potential technical debt.
+Where used, the code should be reviewed and tested to ensure it is correct and maintainable, and it should be acknowledged in the documentation.
+
 ## Further resources
 - A collection of resources for python tooling: [ARC python tooling](https://github-pages.arc.ucl.ac.uk/python-tooling/)
 - A comprehensive guide to reproducible data science, including software development and documentation: [Turing way book](https://book.the-turing-way.org)
