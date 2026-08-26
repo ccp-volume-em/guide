@@ -234,6 +234,28 @@ def create_zarr_ro_crate(dest_path):
 
 Input metadata is read from OME-TIFF or OME-Zarr and converted into physical units, positions, rotations, channels, scales, and transforms.
 
+### Interoperable NGFF RFC 6 transforms
+
+Registration transforms are written in the [OME-NGFF RFC 6 coordinate-transform format](https://github.com/ome/ngff-spec/blob/main/index.md#coordinateTransformations-metadata) rather than as application-specific matrix arrays. Each affine identifies its image path and names its input (`source_metadata`) and output (`registered`) coordinate systems. Using the `ome-zarr-models` v0.6 model for both serialization and validation makes the saved transforms portable to other tools that implement the NGFF coordinate-system and transformation model.
+
+Source: [`src/muvis_align/file/transforms.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/file/transforms.py)
+
+```python
+def metadata_models(path, transform, source_key='source_metadata', transform_key='registered'):
+    affine = Affine(
+        path=path,
+        affine=transform,
+        input=CoordinateSystemIdentifier(name=source_key),
+        output=CoordinateSystemIdentifier(name=transform_key),
+    )
+    return affine.model_dump(exclude_none=True, exclude_defaults=True, exclude_unset=True)
+
+
+def read_transforms(filename):
+    transforms = import_json(filename)
+    return {label: Affine.model_validate(transform).affine for label, transform in transforms.items()}
+```
+
 Source: [`src/muvis_align/image/ZarrDaskSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ZarrDaskSource.py)
 
 ```python
@@ -542,7 +564,7 @@ CMD echo "Launching napari on Xpra. Connect via http://localhost:$XPRA_PORT or $
 | NGFF                    | OME-Zarr default extension, NGFF v0.5, `write_sim_to_ome_zarr`              |
 | Larger-than-memory data | Dask-backed TIFF and Zarr sources, chunked fusion, direct Zarr output       |
 | FAIR implementation     | package metadata, YAML configuration, RO-Crate generation, OME-Zarr outputs |
-| Persistent metadata     | OME metadata parsing, `xarray`/`MSIM` spatial transforms, positions, scales, channels |
+| Persistent metadata     | OME metadata parsing, `xarray`/`MSIM` spatial transforms, positions, scales, channels; interoperable NGFF RFC 6 affine transforms |
 | Performance metrics     | NCC, SSIM, ONMI, MSE-derived score, match metrics, timing logs              |
 | Resumable workflow      | state machine, pair mappings, global mappings, metrics JSON                 |
 | Xpra interface          | Docker stage exposing browser-based napari over Xpra                        |
