@@ -1,5 +1,5 @@
 # CCP-volumeEM guide
 
-Community good practice guide
+Community guide of recommended best practices
 
 ![logo](images/logo.png)

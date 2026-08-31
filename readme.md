@@ -2,4 +2,4 @@
 
 ![logo](docs/images/logo.png)
 
-[Community good practice guide](https://ccp-volume-em.github.io/guide/)
+[Community best practice guide](https://ccp-volume-em.github.io/guide/)
