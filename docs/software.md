@@ -47,7 +47,7 @@ We also recommend to make this as efficient as possible considering limited reso
 There are tools for automated dependency updates, such as [Dependabot](https://github.com/dependabot) and [Renovate](https://docs.renovatebot.com/), including taking care of security vulnerabilities.
 
 ## Support
-Besides Github Issues, for further user support we recomment connecting to a single suitable community forum (e.g. [image.sc](https://forum.image.sc/) for image analysis related software) and providing a link to this forum in the documentation.
+Besides Github Issues, for further user support we recommend connecting to a single suitable community forum (e.g. [image.sc](https://forum.image.sc/) for image analysis related software) and providing a link to this forum in the documentation.
 This also allows the community to support each other and share knowledge.
 
 ## AI use
