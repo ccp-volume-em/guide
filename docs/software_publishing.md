@@ -236,7 +236,7 @@ Recommendations for the definition:
 * Start from a minimal, actively maintained base image and record why it was
   chosen. Reuse an established base image, such as an official Python or CUDA
   image, instead of building an environment from scratch.
-* Pin what you depend on: the base image tag, and ideally its digest; the
+* Pinning dependecy versions confers reproducibility, but can overtime can lead to security vulnerabilities and build failures due to upstream availability.  We recommend a balanced approach whereby you fix the versions of dependencies your application depends on immediately,  leaving auxiliary system and build packages unpinned. If you need to guarantee binary reproducibility, consider minting an image in a public registry like Zenodo.
   system packages; and the versions of the software and its dependencies. An
   unpinned build produces a different environment every time it runs.
 * Install the software as a package (`pip install .` or an equivalent) rather
