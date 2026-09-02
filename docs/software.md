@@ -52,7 +52,7 @@ This also allows the community to support each other and share knowledge.
 
 ## AI use
 
-Modern software development currently often includes the use of generative-AI tools, where benefits should be weighed against maintainability and potential technical debt.
+Modern software development increasingly involves generative-AI tools, which can significantly speed up development cycles. Their use must be weighed against risks including poor code quality, increased technical debt and reduced code comprehension. 
 Where used, the code should be reviewed and tested to ensure it is correct and maintainable, and it should be acknowledged in the documentation.
 
 ## Further resources
