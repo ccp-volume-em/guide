@@ -258,7 +258,7 @@ Recommendations for the definition:
 Graphical applications, such as [napari](https://napari.org/) plugins, need
 additional consideration: the container must be able to reach a display server,
 either through the host's X11 socket or through a browser-based server such as
-Xpra. See [`muvis-align`](muvis-align.md#interactive-interface-with-xpra-container)
+Xpra. For X server access with Docker, make sure the DISPLAY environmental variable is set and host display drivers are mounted at runtime — example docker commands can be found in the [RFI vEM container documentation](https://rosalindfranklininstitute.github.io/volume-em-container-documentation/). See [`muvis-align`](muvis-align.md#interactive-interface-with-xpra-container)
 for a worked example of a napari image with an Xpra-enabled variant.
 
 ### Build and test in continuous integration
