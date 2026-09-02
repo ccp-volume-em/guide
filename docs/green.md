@@ -9,21 +9,25 @@ We use the Green Algorithms for High Performance Computing (**GA4HPC**) software
 As a test case, we use [muvis-align](muvis-align.md), software for multi-view registration of microscopy images, and we measure the carbon footprint of the registration of a large dataset.
 
 HPC hardware setup:
+
 * CPU nodes: Dell PowerEdge R6525
 * Two 2nd/3rd Generation AMD EPYCTM Processors with 64 cores per processor
 * 280W for the CPU nodes processors (for 64 cores)
 
 Power consumption / carbon factors:
+
 * Power Usage Effectiveness (PUE): 1.12
 * Average carbon intensity: 137 gCO2e/kWh
 
 
 Dataset and operation:
+
 * Operation: X/Y stitching of 2D tiles: registration and fusion including export of registration information and fused image data in OME-Zarr format
 * Source data: 64 tiles (OME-Zarr format) of 6400 x 6400 x 16 bit = ~5 GB
 * Resulting fused data: ~ 50500 x 50500 x 16 bit = ~5 GB
 
 GA4HPC results:
+
 * Energy used: 0.19 kWh
 * CPU: 0 days 01:00:19 (1 hours)
 * Total wallclock time: 0 days 00:41:13
@@ -31,11 +35,13 @@ GA4HPC results:
 
 
 Dataset and operation:
+
 * Operation: X/Y stitching of 3D tiles: registration and fusion including export of registration information and fused image data in OME-Zarr format
 * Source data: 4 tiles (OME-Zarr format) of 2048 x 2048 x 200 x 16 bit = ~1.7 GB
 * Resulting fused data: ~ 4000 x 4000 x 220 x 16 bit = ~7 GB
 
 GA4HPC results:
+
 * Energy used: 0.18 kWh
 * CPU: 0 days 00:58:24 (1 hours)
 * Total wallclock time: 0 days 00:38:54
