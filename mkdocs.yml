@@ -1,6 +1,6 @@
 site_name: ccp-volume-em-guide
 site_url: https://ccp-volume-em.github.io/guide/
-site_description: Community good practice guide
+site_description: Community best practice guide
 
 repo_name: guide
 repo_url: https://github.com/ccp-volume-em/guide
@@ -20,6 +20,7 @@ nav:
   - fair.md
   - green.md
   - software.md
+  - software_publishing.md
   - plugins.md
   - plugin_testing.md
   - container_testing.md

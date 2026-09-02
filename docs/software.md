@@ -47,8 +47,15 @@ We also recommend to make this as efficient as possible considering limited reso
 There are tools for automated dependency updates, such as [Dependabot](https://github.com/dependabot) and [Renovate](https://docs.renovatebot.com/), including taking care of security vulnerabilities.
 
 ## Support
-Besides Github Issues, for further user support we recomment connecting to a single suitable community forum (e.g. [image.sc](https://forum.image.sc/) for image analysis related software) and providing a link to this forum in the documentation.
+Besides Github Issues, for further user support we recommend connecting to a single suitable community forum (e.g. [image.sc](https://forum.image.sc/) for image analysis related software) and providing a link to this forum in the documentation.
 This also allows the community to support each other and share knowledge.
+
+## AI use
+
+Modern software development increasingly involves generative-AI tools, which can significantly speed up development cycles. Their use must be weighed against risks including poor code quality, increased technical debt and reduced code comprehension. 
+When used, AI-generated code should be reviewed and tested — ideally by independently and human written tests — to ensure it is correct and maintainable, and the use of generative-AI should be acknowledged in the documentation as well as relevant commits.
+
+We suggest reading the Institue for Research Software's [Responsible use of AI in research software](https://www.software.ac.uk/guide/responsible-use-ai-research-software) before using generative-AI in your projects.
 
 ## Further resources
 - A collection of resources for python tooling: [ARC python tooling](https://github-pages.arc.ucl.ac.uk/python-tooling/)
@@ -58,4 +65,3 @@ This also allows the community to support each other and share knowledge.
 - Documentation on using Docker for containerization: [Docker documentation](https://docs.docker.com/)
 
 - CCP-volumeEM: Good practices for image analysis software with Dr Kimberly Meechan [YouTube video](https://www.youtube.com/watch?v=HHJJZ79KC4Y)
-

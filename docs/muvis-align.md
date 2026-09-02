@@ -128,8 +128,59 @@ Rather than only documenting FAIR principles, `muvis-align` implements concrete 
 
 Source: [`src/muvis_align/ui/project_template.yaml`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/ui/project_template.yaml)
 
-The project_template.yaml file is written in the Bilayers format and serves as the declarative description of the muvis-align workflow. The file is used to dynamically generate the [magicgui](https://pyapp-kit.github.io/magicgui/)-based [napari](https://napari.org/stable/) user interface, allowing workflow parameters, input definitions, and processing options to be defined in a structured configuration file rather than being hard-coded in the application. This approach simplifies interface maintenance, improves reproducibility, and enables the same workflow definition to be reused across the [napari](https://napari.org/stable/) plugin, command-line execution, and containerized deployments.
+The project_template.yaml file is written in the Bilayers format and serves as the declarative description of the muvis-align workflow.
+The file is used to dynamically generate the [magicgui](https://pyapp-kit.github.io/magicgui/)-based [napari](https://napari.org/stable/) user interface, allowing workflow parameters, input definitions, and processing options to be defined in a structured configuration file rather than being hard-coded in the application.
+This approach simplifies interface maintenance, improves reproducibility, and enables the same workflow definition to be reused across the [napari](https://napari.org/stable/) plugin, command-line execution, and containerized deployments.
+Bilayers schemas are represented as a [Pydantic](https://docs.pydantic.dev/) model, which adds typed validation and structured serialization for this workflow definition layer.
 
+Source: [`src/muvis_align/ui/bilayers_util.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/ui/bilayers_util.py)
+
+```python
+from pydantic import BaseModel, ConfigDict, Field, field_validator
+
+
+class BilayersField(BaseModel):
+    model_config = ConfigDict(extra='allow')
+
+    name: str
+    type: str
+    label: str | None = None
+    default: Any = None
+    description: str | None = None
+    section_id: str | None = None
+    section_key: str | None = None
+    cli_order: int = 0
+
+    @field_validator('type', mode='before')
+    @classmethod
+    def _normalize_type(cls, value):
+        return str(value).lower()
+
+    @field_validator('cli_order', mode='before')
+    @classmethod
+    def _normalize_cli_order(cls, value):
+        if value is None or value == '':
+            return 0
+        return int(value)
+
+
+def get_section_dict(template, keys=None):
+    sections = {}
+    if keys is None:
+        keys = [None]
+
+    for key in keys:
+        items = template.get(key, []) if key is not None else template
+        for raw_item in items:
+            item = BilayersField.model_validate({**raw_item, 'section_key': key})
+            section_id = item.section_id or key
+            sections.setdefault(section_id, []).append(item)
+
+    return {
+        section_id: [item.model_dump() for item in sorted(section_items, key=lambda item: item.cli_order)]
+        for section_id, section_items in sections.items()
+    }
+```
 
 The package creates RO-Crates for outputs and adds acquisition/workflow metadata.
 
@@ -182,6 +233,28 @@ def create_zarr_ro_crate(dest_path):
 ## Persistent metadata
 
 Input metadata is read from OME-TIFF or OME-Zarr and converted into physical units, positions, rotations, channels, scales, and transforms.
+
+### Interoperable NGFF RFC 6 transforms
+
+Registration transforms are written in the [OME-NGFF RFC 6 coordinate-transform format](https://github.com/ome/ngff-spec/blob/main/index.md#coordinateTransformations-metadata) rather than as application-specific matrix arrays. Each affine identifies its image path and names its input (`source_metadata`) and output (`registered`) coordinate systems. Using the `ome-zarr-models` v0.6 model for both serialization and validation makes the saved transforms portable to other tools that implement the NGFF coordinate-system and transformation model.
+
+Source: [`src/muvis_align/file/transforms.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/file/transforms.py)
+
+```python
+def metadata_models(path, transform, source_key='source_metadata', transform_key='registered'):
+    affine = Affine(
+        path=path,
+        affine=transform,
+        input=CoordinateSystemIdentifier(name=source_key),
+        output=CoordinateSystemIdentifier(name=transform_key),
+    )
+    return affine.model_dump(exclude_none=True, exclude_defaults=True, exclude_unset=True)
+
+
+def read_transforms(filename):
+    transforms = import_json(filename)
+    return {label: Affine.model_validate(transform).affine for label, transform in transforms.items()}
+```
 
 Source: [`src/muvis_align/image/ZarrDaskSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ZarrDaskSource.py)
 
@@ -491,7 +564,8 @@ CMD echo "Launching napari on Xpra. Connect via http://localhost:$XPRA_PORT or $
 | NGFF                    | OME-Zarr default extension, NGFF v0.5, `write_sim_to_ome_zarr`              |
 | Larger-than-memory data | Dask-backed TIFF and Zarr sources, chunked fusion, direct Zarr output       |
 | FAIR implementation     | package metadata, YAML configuration, RO-Crate generation, OME-Zarr outputs |
-| Persistent metadata     | OME metadata parsing, `xarray`/`MSIM` spatial transforms, positions, scales, channels |
+| Persistent metadata     | OME metadata parsing, `xarray`/`MSIM` spatial transforms, positions, scales, channels; interoperable NGFF RFC 6 affine transforms |
 | Performance metrics     | NCC, SSIM, ONMI, MSE-derived score, match metrics, timing logs              |
 | Resumable workflow      | state machine, pair mappings, global mappings, metrics JSON                 |
 | Xpra interface          | Docker stage exposing browser-based napari over Xpra                        |
+
