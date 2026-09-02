@@ -162,8 +162,8 @@ Publishing a Python library or application on the
 [Python Packaging User Guide](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
 rather than invoking `setup.py` directly.
 
-Define the build system and package metadata in a single definition using `pyproject.toml`. Metadata should
-include:
+Define the build system and package metadata in a single definition using `pyproject.toml`.
+Metadata should include:
 
 * a unique distribution name and version;
 * a short description and `README` as the long description;
@@ -236,7 +236,9 @@ Recommendations for the definition:
 * Start from a minimal, actively maintained base image and record why it was
   chosen. Reuse an established base image, such as an official Python or CUDA
   image, instead of building an environment from scratch.
-* Pinning dependecy versions confers reproducibility, but can overtime can lead to security vulnerabilities and build failures due to upstream availability.  We recommend a balanced approach whereby you fix the versions of dependencies your application depends on immediately,  leaving auxiliary system and build packages unpinned. If you need to guarantee binary reproducibility, consider minting an image in a public registry like Zenodo.
+* Pinning dependency versions confer reproducibility, but overtime can lead to security vulnerabilities and build failures due to upstream availability.
+  We recommend a balanced approach whereby you fix the versions of dependencies your application depends on immediately,
+  leaving auxiliary system and build packages unpinned. If you need to guarantee binary reproducibility, consider minting an image in a public registry like Zenodo.
 * Install the software as a package (`pip install .` or an equivalent) rather
   than copying source files into an arbitrary directory, so that version
   metadata and entry points are available inside the image.
@@ -256,7 +258,8 @@ Recommendations for the definition:
 Graphical applications, such as [napari](https://napari.org/) plugins, need
 additional consideration: the container must be able to reach a display server,
 either through the host's X11 socket or through a browser-based server such as
-Xpra. For X server access with Docker, make sure the DISPLAY environmental variable is set and host display drivers are mounted at runtime — example docker commands can be found in the [RFI vEM container documentation](https://rosalindfranklininstitute.github.io/volume-em-container-documentation/). See [`muvis-align`](muvis-align.md#interactive-interface-with-xpra-container)
+Xpra. For X server access with Docker, make sure the DISPLAY environmental variable is set and host display drivers are mounted at runtime —
+example docker commands can be found in the [RFI vEM container documentation](https://rosalindfranklininstitute.github.io/volume-em-container-documentation/). See [`muvis-align`](muvis-align.md#interactive-interface-with-xpra-container)
 for a worked example of a napari image with an Xpra-enabled variant.
 
 ### Build and test in continuous integration
