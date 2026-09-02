@@ -53,7 +53,9 @@ This also allows the community to support each other and share knowledge.
 ## AI use
 
 Modern software development increasingly involves generative-AI tools, which can significantly speed up development cycles. Their use must be weighed against risks including poor code quality, increased technical debt and reduced code comprehension. 
-Where used, the code should be reviewed and tested to ensure it is correct and maintainable, and it should be acknowledged in the documentation.
+When used, AI-generated code should be reviewed and tested — ideally by independently and human written tests — to ensure it is correct and maintainable, and the use of generative-AI should be acknowledged in the documentation as well as relevant commits.
+
+We suggest reading the Institue for Research Software's [Responsible use of AI in research software](https://www.software.ac.uk/guide/responsible-use-ai-research-software) before using generative-AI in your projects.
 
 ## Further resources
 - A collection of resources for python tooling: [ARC python tooling](https://github-pages.arc.ucl.ac.uk/python-tooling/)
