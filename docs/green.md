@@ -23,8 +23,8 @@ Power consumption / carbon factors:
 Dataset and operation:
 
 * Operation: X/Y stitching of 2D tiles: registration and fusion including export of registration information and fused image data in OME-Zarr format
-* Source data: 64 tiles (OME-Zarr format) of 6400 x 6400 x 16 bit = ~5 GB
-* Resulting fused data: ~ 50500 x 50500 x 16 bit = ~5 GB
+* Source data: 64 tiles (OME-Zarr format) of 6400 x 6400 x 16 bit = 5 GB
+* Resulting fused data: ~ 50500 x 50500 x 16 bit = 5 GB
 
 GA4HPC results:
 
@@ -37,8 +37,8 @@ GA4HPC results:
 Dataset and operation:
 
 * Operation: X/Y stitching of 3D tiles: registration and fusion including export of registration information and fused image data in OME-Zarr format
-* Source data: 4 tiles (OME-Zarr format) of 2048 x 2048 x 200 x 16 bit = ~1.7 GB
-* Resulting fused data: ~ 4000 x 4000 x 220 x 16 bit = ~7 GB
+* Source data: 4 tiles (OME-Zarr format) of 2048 x 2048 x 200 x 16 bit = 1.7 GB
+* Resulting fused data: ~ 4000 x 4000 x 220 x 16 bit = 7 GB
 
 GA4HPC results:
 
@@ -46,6 +46,23 @@ GA4HPC results:
 * CPU: 0 days 00:58:24 (1 hours)
 * Total wallclock time: 0 days 00:38:54
 * 24 gCO2e
+
+
+Dataset and operation:
+
+* Operation: stitching of 2D tiles and low resolution overviews: registration and fusion to OME-Zarr format
+* Source data:
+  * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
+  * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
+* Nominal fused data size: 169114 x 147520 x 1081 x 8 bit = 24.5 GB
+* Resulting multi-size fused data: 350 GB
+
+GA4HPC results:
+
+* Energy used: 7.97 kWh
+* CPU: 14 days 10:26:19 (346 hours)
+* Total wallclock time: 0 days 23:29:11
+* 1 kgCO2e
 
 
 Relevant resources:
