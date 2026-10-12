@@ -55,7 +55,7 @@ Dataset and operation:
   * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
   * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
 * Nominal fused data size: 169114 x 147520 x 1081 x 8 bit = 24.5 GB
-* Resulting multi-size fused data: 350 GB
+* Resulting multi-size fused data: 950 GB
 
 GA4HPC results:
 
@@ -67,6 +67,7 @@ GA4HPC results:
 
 Relevant resources:
 
-* Green Algorithms Initiative, Towards environmentally sustainable computational science: https://www.green-algorithms.org/
+* Guide for software developers [software.ac.uk/guide/introductory-guide-green-computing-software-developers](https://www.software.ac.uk/guide/introductory-guide-green-computing-software-developers)
+* Green Algorithms Initiative, Towards environmentally sustainable computational science: [green-algorithms.org](https://www.green-algorithms.org/)
 * GA4HPC tool: [github.com/Cambridge-Sustainable-Computing-Lab/GreenAlgorithms4HPC](https://github.com/Cambridge-Sustainable-Computing-Lab/GreenAlgorithms4HPC)
-* Green DiSC https://www.software.ac.uk/GreenDiSC, https://github.com/Cambridge-Sustainable-Computing-Lab/greenDiSC
+* Green Digital Sustainability Certification (DiSC) [software.ac.uk/GreenDiSC](https://www.software.ac.uk/GreenDiSC), [github.com/Cambridge-Sustainable-Computing-Lab/greenDiSC](https://github.com/Cambridge-Sustainable-Computing-Lab/greenDiSC)
