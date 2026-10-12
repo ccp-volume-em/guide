@@ -6,6 +6,8 @@ Although there are currently many tools to measure carbon footprint of compute, 
 
 We use the Green Algorithms for High Performance Computing (**GA4HPC**) software, as this is easily deployable on HPC clusters, supports SLURM, and can be retrospectively used without the need for pre-installed software or other components running on the cluster.
 
+## Test cases
+
 As a test case, we use [muvis-align](muvis-align.md), software for multi-view registration of microscopy images, and we measure the carbon footprint of the registration of a large dataset.
 
 HPC hardware setup:
@@ -19,6 +21,7 @@ Power consumption / carbon factors:
 * Power Usage Effectiveness (PUE): 1.12
 * Average carbon intensity: 137 gCO2e/kWh
 
+___
 
 Dataset and operation:
 
@@ -33,6 +36,7 @@ GA4HPC results:
 * Total wallclock time: 0 days 00:41:13
 * 26 gCO2e
 
+___
 
 Dataset and operation:
 
@@ -47,6 +51,7 @@ GA4HPC results:
 * Total wallclock time: 0 days 00:38:54
 * 24 gCO2e
 
+___
 
 Dataset and operation:
 
@@ -65,7 +70,7 @@ GA4HPC results:
 * 1 kgCO2e
 
 
-Relevant resources:
+## Relevant resources:
 
 * Guide for software developers [software.ac.uk/guide/introductory-guide-green-computing-software-developers](https://www.software.ac.uk/guide/introductory-guide-green-computing-software-developers)
 * Green Algorithms Initiative, Towards environmentally sustainable computational science: [green-algorithms.org](https://www.green-algorithms.org/)
