@@ -59,7 +59,7 @@ Dataset and operation:
 * Source data:
   * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
   * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
-* Nominal fused data size: 169114 x 147520 x 1081 x 8 bit = 24.5 GB
+* Nominal fused data size: 169114 x 147520 x 1081 x 8 bit = 24.5 TB
 * Resulting multi-size fused data: 950 GB
 
 GA4HPC results:
