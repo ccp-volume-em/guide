@@ -14,28 +14,31 @@ Repository: [https://github.com/ccp-volume-em/muvis-align](https://github.com/cc
 
 `muvis-align` uses OME-Zarr / NGFF as a primary output format.
 
-OME-Zarr / NGFF writing is delegated to `multiview_stitcher.ngff_utils.write_sim_to_ome_zarr` from [multiview-stitcher](https://pypi.org/project/multiview-stitcher/), including multiscale pyramid generation.
+OME-Zarr / NGFF writing is delegated to `to_multiscales` and `to_ngff_zarr` from [ngff-zarr](https://pypi.org/project/ngff-zarr/), including multiscale pyramid generation.
 
-Source: [`src/muvis_align/image/ome_ngff_helper.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ome_ngff_helper.py)
+Source: [`src/muvis_align/image/ome_zarr_helper.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ome_zarr_helper.py)
 
 ```python
-from multiview_stitcher import ngff_utils
-
-from src.muvis_align.constants import default_ome_zarr_version
+from ngff_zarr import to_ngff_image, to_multiscales, to_ngff_zarr
 
 
-def save_ome_ngff(filename, data, pyramid_downsample=2, ome_version=default_ome_zarr_version, verbose=False):
-    pyramid_downsample_dict = {}
-    for dim in data.dims:
-        if dim in 'xyz':
-            pyramid_downsample_dict[dim] = pyramid_downsample
-        else:
-            pyramid_downsample_dict[dim] = 1
-    ngff_utils.write_sim_to_ome_zarr(data, filename,
-                                     downscale_factors_per_spatial_dim=pyramid_downsample_dict,
-                                     ngff_version=ome_version,
-                                     overwrite=True,
-                                     show_progressbar=verbose)
+def save_ome_image(data, path, dim_order, pixel_size, channels, translation, rotation,
+                   pyramid_downsample=None, compression=None, ome_version=default_ome_zarr_version):
+
+    storage_options = {}
+    compressor, compression_filters = create_compression_filter(compression)
+    if compressor is not None:
+        storage_options['compressor'] = compressor
+    if compression_filters is not None:
+        storage_options['filters'] = compression_filters
+
+    axes_units = {dim: 'micrometer' for dim in dim_order if dim in 'xyz'}
+    image = to_ngff_image(data, dims=dim_order, scale=pixel_size, translation=translation, axes_units=axes_units)
+    multiscales = to_multiscales(image, scale_factors=pyramid_downsample, chunks=create_chunk_dict(default_chunk_size, dim_order))
+    ...
+    to_ngff_zarr(path, multiscales, chunks_per_shard=chunks_per_shard, version=ome_version, **storage_options)
+
+    return multiscales.metadata
 ```
 
 ---
@@ -47,66 +50,90 @@ The code uses [Dask](https://www.dask.org/)-backed image sources for lazy loadin
 Source: [`src/muvis_align/image/source_helper.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/source_helper.py)
 
 ```python
-def create_dask_source(filename, source_metadata=None):
+def create_image_source(filename, source_metadata=None, file_label=None, index=None, transform_key=None):
+    kwargs = {'file_label': file_label, 'index': index}
+    if transform_key is not None:
+        kwargs['transform_key'] = transform_key
     ext = os.path.splitext(filename)[1].lstrip('.').lower()
     if ext.startswith('tif'):
-        dask_source = TiffDaskSource(filename, source_metadata)
+        source = TiffImageSource(filename, source_metadata, **kwargs)
     elif '.zar' in filename.lower():
-        dask_source = ZarrDaskSource(filename, source_metadata)
+        source = ZarrImageSource(filename, source_metadata, **kwargs)
     else:
-        raise ValueError(f'Unsupported file type: {ext}')
-    return dask_source
+        if ext:
+            raise ValueError(f'Unsupported file type: {ext}')
+        else:
+            raise ValueError(f'Unsupported: {filename}')
+    return source
 ```
 
-TIFF files are read lazily through [`dask.delayed`](https://docs.dask.org/en/stable/delayed.html), avoiding immediate full-volume loading.
+TIFF files are read lazily through tifffile's Zarr store (`aszarr`), each pyramid level wrapped as a [Dask](https://www.dask.org/) array, avoiding immediate full-volume loading.
 
-Source: [`src/muvis_align/image/TiffDaskSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/TiffDaskSource.py)
+Source: [`src/muvis_align/image/ome_tiff_helper.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ome_tiff_helper.py)
 
 ```python
-def get_data(self, level=0):
-    if level < 0:
-        dask_data = []
-        for level in range(len(self.shapes)):
-            lazy_array = dask.delayed(tifffile.imread)(self.filename, level=level)
-            data = dask.array.from_delayed(lazy_array, shape=self.shapes[level], dtype=self.dtype)
-            dask_data.append(data)
+with tifffile.TiffFile(filename) as tif:
+    series = tif.series[0]
+    axes = series.axes
+    # multiscales=True: a group even for one level, levels ordered finest first
+    group = zarr.open_group(store=tif.aszarr(series=0, multiscales=True), mode='r')
+    attributes = group.attrs.get('ome', group.attrs)
+    datasets = attributes['multiscales'][0]['datasets']
+    arrays = []
+    for dataset in datasets:
+        array = group[dataset['path']]
+        ...
+for level, array in enumerate(arrays):
+    # meta given, so dask does not probe the dtype with a read
+    data = da.from_array(array, chunks=array.chunks, meta=np.empty((0,) * array.ndim, dtype=array.dtype),
+                         name='tiff-' + tokenize(filename, stat.st_size, stat.st_mtime_ns, level))
+    datas.append(data)
+```
+
+OME-Zarr metadata is read from the store's consolidated metadata (falling back to [ngff-zarr](https://pypi.org/project/ngff-zarr/)'s parser), and each multiscale level is opened directly as a Dask array.
+
+Source: [`src/muvis_align/image/ZarrImageSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ZarrImageSource.py)
+
+```python
+def init_metadata(self):
+    # metadata only, off consolidated metadata: the arrays wait for first access to self.data
+    metadata = read_ome_zarr_source_metadata(self.filename)
+
+    self.dimension_order = metadata['dimension_order']
+    self.shapes = metadata['shapes']
+    self.shape = self.shapes[0]
+    self.dtype = metadata['dtype']
+    ...
+
+def _load_data(self):
+    ...
+    datas = []
+    for path, sim_shape in zip(self._level_paths, self.shapes):
+        data = da.from_zarr(self.filename, component=path)
+        if tuple(data.shape) != tuple(sim_shape):
+            data = data.reshape(sim_shape)
+        datas.append(data)
+    self._data = datas
+```
+
+Fusion writes directly to OME-Zarr, level by level and block by block, rather than creating a full fused array in memory first.
+
+Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py), [`src/muvis_align/fusion_blocks.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/fusion_blocks.py)
+
+```python
+with dask.config.set(scheduler='threads'), warnings.catch_warnings():
+    if saving_zarr:
+        levels = export_levels(source_spacings, output_stack_properties, scaled_dims, native=is_native)
+        fused_image = fuse_levels_to_ome_zarr(
+            msims, levels, output_filename, transform_key, output_stack_properties, output_chunksize,
+            fusion_func=fuse_func, zarr_options=zarr_options,
+            batch_options=self._fusion_batch_options(saving_zarr, max_workers=workers),
+            ranks=source_spacings if is_native else None, average_levels=not is_native,
+            level_weights=level_bytes)
     else:
-        lazy_array = dask.delayed(tifffile.imread)(self.filename, level=level)
-        dask_data = dask.array.from_delayed(lazy_array, shape=self.shapes[level], dtype=self.dtype)
-    return dask_data
-```
-
-OME-Zarr data is read through `ome_zarr.reader.Reader` from [ome-zarr](https://pypi.org/project/ome-zarr/), preserving multiscale data levels.
-
-Source: [`src/muvis_align/image/ZarrDaskSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ZarrDaskSource.py)
-
-```python
-reader = Reader(location)
-nodes = list(reader())
-image_node = nodes[0]
-self.data = image_node.data
-self.metadata = image_node.metadata
-
-self.shapes = [level.shape for level in self.data]
-self.shape = self.shapes[0]
-self.dtype = self.data[0].dtype
-```
-
-`Fusion` from multiview-stitcher can write directly to Zarr during computation, rather than creating a full fused array in memory first.
-
-Source: [`src/muvis-align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis-align/MVSRegistration.py)
-
-```python
-with dask.config.set(scheduler='threads'):
-    fused_image = fusion.fuse(
-        sims,
-        fusion_func=fuse_func,
-        transform_key=transform_key,
-        output_stack_properties=output_stack_properties,
-        output_zarr_url=output_filename,
-        zarr_options=zarr_options,
-        output_chunksize=output_chunksize
-    )
+        fused_image = fusion.fuse(msims, fusion_func=fuse_func, transform_key=transform_key,
+                                  output_stack_properties=output_stack_properties,
+                                  output_chunksize=output_chunksize)
 ```
 
 ---
@@ -150,6 +177,9 @@ class BilayersField(BaseModel):
     section_id: str | None = None
     section_key: str | None = None
     cli_order: int = 0
+    options: list[BilayersOption] | None = None
+    file_count: str | None = None
+    output_dir_set: bool = False
 
     @field_validator('type', mode='before')
     @classmethod
@@ -182,48 +212,59 @@ def get_section_dict(template, keys=None):
     }
 ```
 
-The package creates RO-Crates for outputs and adds acquisition/workflow metadata.
+The package creates a Workflow Run RO-Crate for each run, recording the project parameters, source images and results.
 
 Source: [`src/muvis_align/file/rocrate_utils.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/file/rocrate_utils.py)
 
 ```python
-def create_ro_crate(dest_path, image_paths=[]):
-    crate = ZarrCrate()
+def create_workflow_run_crate(dest_path, params_path, params, source_paths, result_paths,
+                              start_time=None, end_time=None):
+    crate = ROCrate()
+    root = crate.root_dataset
+    root['name'] = f'muvis-align run: {get_filetitle(os.path.normpath(dest_path))}'
+    for profile_id, profile_name in WORKFLOW_RUN_PROFILES.items():
+        profile = crate.add(ContextEntity(crate, profile_id, {'@type': ['CreativeWork', 'Profile'],
+                                                              'name': profile_name, 'version': '0.5'}))
+        root.append_to('conformsTo', profile)
 
-    for image_path in image_paths:
-        crate.add_dataset(dest_path=image_path)
-
-    properties = {"fbbi_id": {"@id": 'obo:FBbi_00000257'}}
-    crate.add(ImageAcquistion(crate, properties=properties))
-
-    workflow_schema_filename = os.path.join('src', 'muvis_align/', NAPARI_PROJECT_TEMPLATE)
-    crate.add_workflow(workflow_schema_filename)
+    workflow_entity = add_workflow(crate)
+    parameters = add_formal_parameters(crate, workflow_entity)
+    ...
+    action_entity = crate.add_action(workflow_entity, identifier='#run-001', object=objects, result=results,
+                                     properties=action_properties)
+    root.append_to('mentions', action_entity)
 
     crate.write(dest_path)
     return crate
 ```
 
-OME-Zarr outputs receive a Zarr-specific RO-Crate.
+OME-Zarr outputs receive a Zarr-specific RO-Crate, recording the sources, acquisition, registration metrics and the fusion step.
 
 Source: [`src/muvis_align/file/rocrate_utils.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/file/rocrate_utils.py)
 
 ```python
-def create_zarr_ro_crate(dest_path):
+def create_zarr_ro_crate(dest_path, sources=None, source_paths=(), metrics=None):
     crate = ZarrCrate()
-
-    properties = {}
-    properties['name'] = get_filetitle(dest_path)
+    # the crate is written as the fusion ends
+    fusion_time = to_iso_datetime(datetime.now())
+    properties = {'name': get_filetitle(dest_path),
+                  'description': f'OME-Zarr image fused by muvis-align from {len(source_paths)} sources',
+                  'datePublished': fusion_time,
+                  'encodingFormat': ZARR_ENCODING_FORMAT}
     dataset_entity = crate.add_dataset(dest_path='.', properties=properties)
-
-    acquisition_properties = {
-        '@type': 'image_acquisition',
-        'fbbi_id': {'@id': 'obo:FBbi_00000257'},
-    }
-    acquisition_entity = ContextEntity(crate, '#acquisition-001', acquisition_properties)
-    crate.add(acquisition_entity)
-
-    dataset_entity['resultOf'] = acquisition_entity
-
+    source_entities = [crate.add(ContextEntity(crate, to_crate_path(source_path, dest_path), {
+        '@type': 'Dataset' if os.path.isdir(source_path) else 'File'})) for source_path in source_paths]
+    if source_entities:
+        dataset_entity['isBasedOn'] = source_entities
+    if sources:
+        add_data_capture(crate, dataset_entity, sources, source_entities)
+    ...
+    fusion_properties = {'@type': 'CreateAction', 'name': 'Fusion to OME-Zarr', 'endTime': fusion_time,
+                         'instrument': add_software(crate), 'result': dataset_entity}
+    if source_entities:
+        fusion_properties['object'] = source_entities
+    fusion_entity = crate.add(ContextEntity(crate, '#fusion-001', fusion_properties))
+    dataset_entity.append_to('mentions', fusion_entity)
     crate.write(dest_path)
     return crate
 ```
@@ -236,7 +277,7 @@ Input metadata is read from OME-TIFF or OME-Zarr and converted into physical uni
 
 ### Interoperable NGFF RFC 6 transforms
 
-Registration transforms are written in the [OME-NGFF RFC 6 coordinate-transform format](https://github.com/ome/ngff-spec/blob/main/index.md#coordinateTransformations-metadata) rather than as application-specific matrix arrays. Each affine identifies its image path and names its input (`source_metadata`) and output (`registered`) coordinate systems. Using the `ome-zarr-models` v0.6 model for both serialization and validation makes the saved transforms portable to other tools that implement the NGFF coordinate-system and transformation model.
+Registration transforms are written in the [OME-NGFF RFC 6 coordinate-transform format](https://github.com/ome/ngff-spec/blob/main/index.md#coordinatetransformations-metadata) rather than as application-specific matrix arrays. Each affine identifies its image path and names its input (`source_metadata`) and output (`registered`) coordinate systems. Using the `ome-zarr-models` v0.6 model for both serialization and validation makes the saved transforms portable to other tools that implement the NGFF coordinate-system and transformation model.
 
 Source: [`src/muvis_align/file/transforms.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/file/transforms.py)
 
@@ -256,31 +297,45 @@ def read_transforms(filename):
     return {label: Affine.model_validate(transform).affine for label, transform in transforms.items()}
 ```
 
-Source: [`src/muvis_align/image/ZarrDaskSource.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ZarrDaskSource.py)
+Source: [`src/muvis_align/image/ome_zarr_util.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/image/ome_zarr_util.py)
 
 ```python
-axes = self.metadata['axes']
-dims = ''.join([axis['name'] for axis in axes])
-self.dimension_order = dims
-units = {axis['name']: axis['unit'] for axis in axes if 'unit' in axis}
+multiscale = multiscales[0]
+file_dims = tuple(axis['name'] for axis in multiscale.get('axes', []))
 
-for ct_index, transforms in enumerate(self.metadata.get('coordinateTransformations', [])):
-    scale = {}
-    position = {}
-    for transform in transforms:
-        if transform['type'] == 'scale':
-            scale = {dim: value for dim, value in zip(dims, transform['scale']) if dim in dims_used}
-        if transform['type'] == 'translation':
-            position = {dim: value for dim, value in zip(dims, transform['translation']) if dim in dims_used}
+file_shapes, scales, dtypes = [], [], set()
+translation = {}
+for index, dataset in enumerate(multiscale.get('datasets', [])):
+    node = nodes.get(dataset.get('path'))
+    transforms = dataset.get('coordinateTransformations', [])
+    scale_values = next((transform['scale'] for transform in transforms
+                         if transform.get('type') == 'scale'), None)
+    shape = node.get('shape')
+    file_shapes.append(tuple(shape))
+    scales.append(dict(zip(file_dims, scale_values)))
+    if index == 0:
+        translation_values = next((transform['translation'] for transform in transforms
+                                   if transform.get('type') == 'translation'), None)
+        if translation_values is not None:
+            translation = dict(zip(file_dims, translation_values))
 ```
 
-The workflow converts SIMs into `MSIM` objects and performs pairwise/global registration on these multiscale spatial images.
+The workflow builds an `MSIM` object for each source and performs pairwise/global registration on these multiscale spatial images.
 
 Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py)
 
 ```python
-self.msims = [msi_utils.get_msim_from_sim(sim) for sim in self.sims]
-results = self.register_global(sims, self.msims, register_indices=register_indices, params=params)
+def build_msim(index):
+    return build_source_msim(self.sources[index], self._msim_output_order, self.positions[index],
+                             self._msim_transforms[index], self.source_transform_key,
+                             z_scale=self._msim_z_scale, from_level=from_levels[index] if from_levels else 0,
+                             ends_only=ends_only)
+
+msims = pooled_map(build_msim, len(self.sources), default_msim_build_workers, progress_factory,
+                   desc='Building sources', weight=weight,
+                   timing_label='Build msims' if self.logging_time else None)
+...
+results = self.register_global(self.pair_msims, register_indices=register_indices, params=params)
 ```
 
 The parsed OME metadata (axes, units, voxel scale, translations/positions, channels, and coordinate transforms) is preserved in this [`xarray`](https://docs.xarray.dev/)-based `MSIM` (multiscale-spatial-image) representation, where image data remains in labeled dimensions and spatial context is stored as coordinates/attributes. This metadata is propagated through image operations, updated during pairwise/global registration, and carried into fusion/export (for example, OME-Zarr) to preserve physical-space interpretation and multiscale provenance.
@@ -300,7 +355,7 @@ print(f'Parameters file: {args.params}')
 with open(args.params, 'r', encoding='utf8') as file:
     params = yaml.safe_load(file)
 
-pipeline = Pipeline(params)
+pipeline = Pipeline(params, params_path=args.params)
 pipeline.run()
 ```
 
@@ -328,8 +383,7 @@ all_metric_funcs = {
     'ssim': lambda im1, im2: structural_similarity(
         np.nan_to_num(im1),
         np.nan_to_num(im2),
-        data_range=data_range,
-        channel_axis=reg_channel),
+        data_range=data_range),
     'onmi': lambda im1, im2:
         normalized_mutual_information(
             np.nan_to_num(im1),
@@ -339,7 +393,7 @@ all_metric_funcs = {
 }
 ```
 
-Source: `src/muvis_align/metrics.py`
+Source: [`src/muvis_align/metrics.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/metrics.py)
 
 #### NCC — Normalized Cross-Correlation
 
@@ -394,18 +448,18 @@ This combination gives a more robust assessment of registration performance than
 
 `muvis-align` stores intermediate registration state in mapping and metrics files, allowing workflows to continue from pairwise registration, global registration, or fused output.
 
-Source: [`src/muvis-align/constants.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis-align/constants.py)
+Source: [`src/muvis_align/constants.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/constants.py)
 
 ```python
 default_pair_mappings_name = 'pair_mappings.json'
 default_mappings_name = 'mappings.json'
 metrics_name = 'metrics.json'
-metrics_tabular_name = 'mappings.csv'
+default_mappings_tabular_name = 'mappings.csv'
 ```
 
 The registration state machine tracks progress through the workflow.
 
-Source: [`src/muvis-align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis-align/MVSRegistration.py)
+Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py)
 
 ```python
 class RegState(Enum):
@@ -419,7 +473,7 @@ class RegState(Enum):
 
 Existing output files are detected before re-running expensive steps.
 
-Source: [`src/muvis-align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis-align/MVSRegistration.py)
+Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py)
 
 ```python
 def check_progress(self, output_filename, output_format):
@@ -435,13 +489,17 @@ def check_progress(self, output_filename, output_format):
 
 Pair mappings, final mappings, and metrics are saved separately.
 
-Source: [`src/muvis-align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis-align/MVSRegistration.py)
+Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py)
 
 ```python
-self.save_pair_mappings(pair_results['pair_mappings'], qualities, bboxes)
-results = self.register_global(sims, self.msims, register_indices=register_indices, params=params)
-self.save_mappings(results['mappings'])
-self.save_metrics(results['metrics'])
+def register(self, register_msims=None, register_indices=None, params=None):
+    pair_results = self.register_pairs(register_msims=register_msims, register_indices=register_indices, params=params)
+    self.save_pair_results(pair_results['pair_mappings'], metrics=pair_results['metrics'])
+    results = self.register_global(self.pair_msims, register_indices=register_indices, params=params)
+    self.save_group_pair_mappings()
+    self.save_mappings(results['mappings'])
+    self.save_metrics(results['metrics'])
+    return results
 ```
 
 ### Restoring registered transforms from intermediate output
@@ -462,17 +520,19 @@ def check_progress(self, output_filename, output_format):
         self.state = RegState.PAIRS_REG
 ```
 
-When progress indicates pairwise/global registration already exists, `init_progress` loads saved mappings and reapplies transforms to SIMs instead of recomputing registration.
+When progress indicates pairwise/global registration already exists, `init_progress` loads saved mappings and reapplies transforms to the MSIMs instead of recomputing registration.
 
 Source: [`src/muvis_align/MVSRegistration.py`](https://github.com/ccp-volume-em/muvis-align/blob/main/src/muvis_align/MVSRegistration.py)
 
 ```python
 if self.is_global_registered():
-    mappings = import_json(mappings_filename)
-    for sim, label in zip(sims, self.file_labels):
-        mapping = param_utils.affine_to_xaffine(np.array(mappings[label]))
-        value = mapping
-        si_utils.set_sim_affine(sim, value, transform_key=self.reg_transform_key)
+    mappings = read_transforms(mappings_filename)
+    ...
+    self.mappings = {}
+    for index, filename in enumerate(self.filenames):
+        self.mappings[index] = xaffine_from_matrix(find_file_dict_item(mappings, filename))
+    if self._msims is not None:
+        self._apply_mappings(self._msims)
 ```
 
 JSON persistence/reload is handled by shared utilities:
@@ -500,16 +560,21 @@ The Dockerfile defines a standard napari container and a second Xpra-enabled ima
 Source: [`Dockerfile`](https://github.com/ccp-volume-em/muvis-align/blob/main/Dockerfile)
 
 ```dockerfile
-FROM python:3.11-slim-bookworm AS muvis-align
-
+FROM python:3.12-slim-bookworm AS muvis-align
+...
 COPY requirements.txt .
+
+RUN python -m pip install --upgrade pip
+RUN pip install -r requirements.txt
+RUN pip install napari[all]
+RUN pip install napari-ome-zarr
+
 COPY run.py .
 COPY pyproject.toml .
 COPY src/ src/
 
-RUN pip install -r requirements.txt
-RUN pip install napari[all]
-RUN pip install .
+RUN --mount=type=bind,source=.git,target=/app/.git \
+    pip install .
 
 ENTRYPOINT ["python3", "-m", "napari", "--plugin", "muvis-align"]
 ```
@@ -520,7 +585,7 @@ Source: [`Dockerfile`](https://github.com/ccp-volume-em/muvis-align/blob/main/Do
 
 ```dockerfile
 FROM muvis-align AS muvis-align-xpra
-
+...
 RUN apt-get update && \
     apt-get install -yqq \
         xpra \
@@ -528,27 +593,33 @@ RUN apt-get update && \
         menu-xdg \
         xdg-utils \
         xterm \
-        sshfs && \
+        sshfs \
+        x11-xkb-utils \
+        xkb-data && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV DISPLAY=:100
 ENV XPRA_PORT=9876
-ENV XPRA_START="python3 -m napari --with muvis-align"
-ENV XPRA_EXIT_WITH_CLIENT="yes"
-ENV XPRA_XVFB_SCREEN="1920x1080x24+32"
+ENV XPRA_START="python3 -c \"import napari; viewer = napari.Viewer(); viewer.window.add_plugin_dock_widget('muvis-align'); viewer.window._qt_window.showMaximized(); napari.run()\""
+ENV XPRA_EXIT_WITH_CHILDREN="yes"
+ENV XPRA_EXIT_WITH_CLIENT="no"
+ENV XPRA_XVFB_SCREEN="8192x4096x24+32"
 EXPOSE 9876
 ```
 
 ```dockerfile
 CMD echo "Launching napari on Xpra. Connect via http://localhost:$XPRA_PORT or $(hostname -i):$XPRA_PORT"; \
-    xpra start \
+    PATH=/usr/bin:/usr/local/bin:$PATH xpra start \
     --bind-tcp=0.0.0.0:$XPRA_PORT \
     --html=on \
-    --start="$XPRA_START" \
+    ...
+    --resize-display=yes \
+    --start-child="$XPRA_START" \
+    --exit-with-children="$XPRA_EXIT_WITH_CHILDREN" \
     --exit-with-client="$XPRA_EXIT_WITH_CLIENT" \
     --daemon=no \
-    --xvfb="/usr/bin/Xvfb +extension Composite -screen 0 $XPRA_XVFB_SCREEN -nolisten tcp -noreset" \
+    --xvfb="/usr/bin/Xvfb +extension Composite +extension RANDR -screen 0 $XPRA_XVFB_SCREEN -dpi 96 -nolisten tcp -noreset" \
     --pulseaudio=no \
     --notifications=no \
     --bell=no \
@@ -561,7 +632,7 @@ CMD echo "Launching napari on Xpra. Connect via http://localhost:$XPRA_PORT or $
 
 | Practice                | Source-code implementation                                                  |
 | ----------------------- | --------------------------------------------------------------------------- |
-| NGFF                    | OME-Zarr default extension, NGFF v0.5, `write_sim_to_ome_zarr`              |
+| NGFF                    | OME-Zarr default extension, NGFF v0.5, `to_ngff_zarr`                       |
 | Larger-than-memory data | Dask-backed TIFF and Zarr sources, chunked fusion, direct Zarr output       |
 | FAIR implementation     | package metadata, YAML configuration, RO-Crate generation, OME-Zarr outputs |
 | Persistent metadata     | OME metadata parsing, `xarray`/`MSIM` spatial transforms, positions, scales, channels; interoperable NGFF RFC 6 affine transforms |
