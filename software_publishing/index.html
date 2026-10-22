@@ -1,0 +1,1235 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Community best practice guide">
+      
+      
+      
+        <link rel="canonical" href="https://ccp-volume-em.github.io/guide/software_publishing/">
+      
+      
+        <link rel="prev" href="../software/">
+      
+      
+        <link rel="next" href="../plugins/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Making software public - ccp-volume-em-guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#making-software-public" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="ccp-volume-em-guide" class="md-header__button md-logo" aria-label="ccp-volume-em-guide" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ccp-volume-em-guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Making software public
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ccp-volume-em/guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    guide
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="ccp-volume-em-guide" class="md-nav__button md-logo" aria-label="ccp-volume-em-guide" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    ccp-volume-em-guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ccp-volume-em/guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    guide
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CCP-volumeEM guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fair/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FAIR principles
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../green/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Green computing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../software/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Software Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Making software public
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Making software public
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before publishing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statements-about-ai-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statements about AI use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pypi-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PyPI package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containerisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containerisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containerisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write-the-container-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Write the container definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-and-test-in-continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build and test in continuous integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tag-and-publish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag and publish
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-how-to-run-the-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document how to run the image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shared-infrastructure-and-archiving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared infrastructure and archiving
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plugins/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plugin development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plugin_testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Writing Tests For Plugins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../container_testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Container testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ngff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Next Generation File Format (NGFF)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../muvis-align/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Muvis align
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-publishing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Before publishing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#github" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GitHub
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GitHub">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a release
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#licence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Licence
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#statements-about-ai-use" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Statements about AI use
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pypi-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PyPI package
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#containerisation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Containerisation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Containerisation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#write-the-container-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Write the container definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-and-test-in-continuous-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build and test in continuous integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tag-and-publish" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tag and publish
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#document-how-to-run-the-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Document how to run the image
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#shared-infrastructure-and-archiving" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Shared infrastructure and archiving
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="making-software-public">Making software public</h1>
+<p>Publishing research software is more than making a repository visible. A useful
+public release should be installable, documented, licensed, citable and free of
+information that should remain private. The recommendations below assume that
+the software has already been tested, reviewed and versioned as described in
+<a href="../software/">Software Development</a>.</p>
+<h2 id="before-publishing">Before publishing</h2>
+<p>Review the complete repository history as well as the current files. Removing a
+secret from the latest commit does not remove it from earlier commits.</p>
+<p>Before the first public release:</p>
+<ul>
+<li>Confirm that all contributors and, where relevant, their employers or funders
+  agree that the software can be released.</li>
+<li>Remove credentials, access tokens, private URLs, personal data, patient data,
+  confidential issue discussions and data that you do not have permission to
+  redistribute. Revoke and replace any credential that has ever been committed.</li>
+<li>Check the licences of source code, models, example data, fonts, icons and
+  other third-party material. Record their copyright and attribution notices.</li>
+<li>Add a <code>README</code>, a licence, installation and usage instructions, contributor
+  guidance, a citation file and a way to report problems.</li>
+<li>Test installation in a clean environment and run the automated test suite.
+  Test the built package, not only the source checkout.</li>
+<li>Choose a release version and prepare release notes describing important
+  changes, known limitations and any compatibility breaks.</li>
+</ul>
+<p>Avoid committing large datasets, model weights and generated build files to the
+source repository. Deposit large research outputs in an appropriate public repository
+and link to them using a persistent identifier.</p>
+<h2 id="github">GitHub</h2>
+<p>A public <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/about-repositories">GitHub repository</a>
+makes the source and its history discoverable and gives users a place to report
+issues and contribute changes. Before changing a private repository to public,
+inspect branches, tags, pull requests, Actions logs and release assets: some of
+these also become visible. GitHub documents the
+<a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility">consequences of changing repository visibility</a>.</p>
+<p>Suggested contents for the repository:</p>
+<ul>
+<li><code>README.md</code>: purpose, status, supported platforms, installation, a minimal
+  example, links to full documentation, support and citation instructions.</li>
+<li><code>LICENSE</code> or <code>LICENSE.md</code>: the full licence text.</li>
+<li><code>CITATION.cff</code>: title, authors, ORCID identifiers, version, release date and
+  DOI, when available. GitHub uses this file to display a <strong>Cite this
+  repository</strong> link; see its
+  <a href="https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files">citation-file guidance</a>.</li>
+<li><code>CONTRIBUTING.md</code>: how to set up a development environment, run tests and
+  submit a change.</li>
+<li><code>CODE_OF_CONDUCT.md</code>: expected behaviour and a route for confidential
+  reporting.</li>
+<li><code>SECURITY.md</code>: supported versions and how to report a vulnerability without
+  first disclosing it publicly.</li>
+<li>A dependency or environment specification, with direct dependencies and
+  supported language versions declared accurately.</li>
+</ul>
+<p>Use an organisation-owned repository for collaborative projects when possible,
+so that stewardship does not depend on one person's account. Give at least two
+maintainers the permissions needed to make a release and enable multi-factor
+authentication and branch protection.</p>
+<h3 id="create-a-release">Create a release</h3>
+<p>Create a release from a reviewed commit on the default branch:</p>
+<ol>
+<li>Update the version, changelog, citation metadata and documentation.</li>
+<li>Run tests and build the documentation and distribution artefacts in a clean
+   environment.</li>
+<li>Create an annotated Git tag using the project's version convention, for
+   example <code>v1.2.0</code>.</li>
+<li>Create a GitHub Release from that tag and add release notes.</li>
+<li>Publish packages and container images from the same tag, then test that
+   users can install them using the documented commands.</li>
+</ol>
+<p><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">GitHub Releases</a>
+associate a fixed Git tag with release notes and downloadable assets. Do not
+move or reuse a published tag. If a release is faulty, publish a new patch
+release and explain the problem.</p>
+<p>For long-term preservation and citation, connect the repository to a research
+archive such as <a href="https://help.zenodo.org/docs/github/">Zenodo</a>. Archive each
+release and add the resulting version-specific DOI to <code>CITATION.cff</code>. A concept
+DOI can refer to the software as a whole, while a version DOI identifies the
+exact software used in an analysis; prefer the version DOI when reproducibility
+requires a particular release.</p>
+<h2 id="licence">Licence</h2>
+<p>Copyright exists even when no licence file is present. A public repository
+without a licence can be viewed and forked under the hosting platform's terms,
+but that does not generally give others permission to use, modify or distribute
+the software. See <a href="https://choosealicense.com">Choose a License</a>
+for an accessible explanation.</p>
+<p>Choose the licence before accepting external contributions, and obtain agreement
+from all copyright holders. Consider:</p>
+<ul>
+<li>compatibility with the licences of dependencies and incorporated code;</li>
+<li>whether derived works may be distributed under other terms (a permissive
+  licence) or must remain open under compatible terms (a copyleft licence);</li>
+<li>requirements imposed by an employer, funder, consortium or target ecosystem;</li>
+<li>patent provisions, attribution requirements and the intended commercial use.</li>
+</ul>
+<p>Common choices include BSD-3-Clause, MIT and Apache-2.0 as permissive licences,
+and GPL-3.0 as a strong copyleft licence. This list is not legal advice; consult
+your institution's research software or legal team when ownership or licence
+compatibility is unclear. Use a standard
+<a href="https://opensource.org/licenses">OSI-approved licence</a> without changing its
+text, and include its exact SPDX identifier in package metadata.</p>
+<p>A repository may need separate licences for software, documentation, data and
+model weights. State clearly which files each licence covers. Creative Commons
+licences may suit documentation and data but are
+<a href="https://choosealicense.com/non-software/">not recommended for software</a>.
+Retain third-party notices and make sure example data can legally be published.</p>
+<h2 id="statements-about-ai-use">Statements about AI use</h2>
+<p>Generative-AI tools may influence source code, tests, documentation, images or
+translations. The human contributors and maintainers remain responsible for
+everything released: AI systems should not be listed as authors or copyright
+holders.</p>
+<p>Follow the policies of your institution, funder, publisher and software
+community. When AI use was substantive, add a short statement to the repository,
+release notes or associated paper. Record enough information to make the role of
+the tool understandable, without publishing confidential prompts or sensitive
+data. A statement can identify:</p>
+<ul>
+<li>the tool and model, including the version or access date where known;</li>
+<li>which parts of the work it assisted with;</li>
+<li>whether generated output was modified;</li>
+<li>how a human reviewed, tested and validated the result.</li>
+</ul>
+<p>For example:</p>
+<blockquote>
+<p>Generative AI was used to suggest docstrings and unit-test cases. All
+suggestions were reviewed and edited by the maintainers, and the resulting
+software passed the project's automated tests. No confidential source code or
+research data was provided to the service.</p>
+</blockquote>
+<p>If no generative-AI tool contributed to the release, a statement is normally
+unnecessary unless a relevant policy explicitly requires one.</p>
+<p>Do not submit personal, confidential, security-sensitive or unpublished
+material to an external AI service unless its data handling terms and your
+project approvals permit this. Treat generated code like any other external
+contribution: understand it, review it for security and bias, test it, and check
+for licence or attribution concerns before release. AI output can be plausible
+but incorrect, and an AI-use statement does not replace quality assurance.</p>
+<h2 id="pypi-package">PyPI package</h2>
+<p>Publishing a Python library or application on the
+<a href="https://pypi.org/">Python Package Index (PyPI)</a> allows users to install it with
+<code>pip</code>. Follow the maintained
+<a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Python Packaging User Guide</a>
+rather than invoking <code>setup.py</code> directly.</p>
+<p>Define the build system and package metadata in a single definition using <code>pyproject.toml</code>.
+Metadata should include:</p>
+<ul>
+<li>a unique distribution name and version;</li>
+<li>a short description and <code>README</code> as the long description;</li>
+<li>the licence expression and licence files;</li>
+<li>required Python version and runtime dependencies;</li>
+<li>authors or maintainers;</li>
+<li>project URLs for source, documentation, issues and changelog;</li>
+<li>classifiers and optional dependencies where useful.</li>
+</ul>
+<p>Build both a source distribution and a wheel, then check their metadata:</p>
+<div class="highlight"><pre><span></span><code><span class="go">python -m pip install --upgrade build twine</span>
+<span class="go">python -m build</span>
+<span class="go">python -m twine check --strict dist/*</span>
+</code></pre></div>
+<p>Inspect the archive contents and install the wheel into a new virtual
+environment. If the project has compiled extensions, provide wheels for the
+supported combinations of operating system, architecture and Python version,
+and test each build.</p>
+<p>Use <a href="https://packaging.python.org/en/latest/guides/using-testpypi/">TestPyPI</a>
+to exercise a new packaging workflow before the production release. PyPI does
+not permit a published file or version to be replaced, so corrections require a
+new version.</p>
+<p>For automated releases, prefer
+<a href="https://docs.pypi.org/trusted-publishers/">PyPI Trusted Publishing</a>. It uses
+short-lived identity tokens from the CI service instead of storing a long-lived
+PyPI token in repository secrets. Restrict the publishing job to protected tags
+or a protected release environment, and require review where appropriate.
+Build once, test those exact artefacts, and promote the same files to the
+production index.</p>
+<p>After publishing, verify the package page and test the normal user workflow:</p>
+<div class="highlight"><pre><span></span><code><span class="go">python -m pip install your-package</span>
+<span class="go">python -c "import your_package"</span>
+</code></pre></div>
+<h2 id="containerisation">Containerisation</h2>
+<p>For maximal reproducibility, a key <a href="../fair/">FAIR</a> principle, consider creating a
+container definition that installs the software and its dependencies. A container
+image bundles the interpreter, libraries, system packages and configuration that
+the software needs, so users obtain the same environment as the developers. This
+is particularly valuable for volume EM tools, which often combine Python
+packages, compiled libraries, GPU frameworks and command-line utilities that are
+difficult to install consistently across operating systems.</p>
+<p>Containerisation complements, rather than replaces, a conventional package
+release. Publish a <a href="#pypi-package">PyPI package</a> or conda package for users who
+want to work inside their own environment, and a container image for users who
+want a fixed, ready-to-run environment or who work on shared infrastructure.</p>
+<p>For an introduction to containers in this context, see
+<a href="https://rosalindfranklininstitute.github.io/volume-em-container-documentation/intro/containers/">Using Containers</a>.</p>
+<h3 id="write-the-container-definition">Write the container definition</h3>
+<p>Keep the container definition, for example a <code>Dockerfile</code>, in the source
+repository so that it is versioned and reviewed alongside the code. Build the
+image from a released artefact or a specific commit rather than from uncommitted
+local files.</p>
+<p>Recommendations for the definition:</p>
+<ul>
+<li>Start from a minimal, actively maintained base image and record why it was
+  chosen. Reuse an established base image, such as an official Python or CUDA
+  image, instead of building an environment from scratch.</li>
+<li>Pinning dependency versions confer reproducibility, but overtime can lead to security vulnerabilities and build failures due to upstream availability.
+  We recommend a balanced approach whereby you fix the versions of dependencies your application depends on immediately,
+  leaving auxiliary system and build packages unpinned. If you need to guarantee binary reproducibility, consider minting an image in a public registry like Zenodo.</li>
+<li>Install the software as a package (<code>pip install .</code> or an equivalent) rather
+  than copying source files into an arbitrary directory, so that version
+  metadata and entry points are available inside the image.</li>
+<li>Use multi-stage builds to keep build tools out of the final image, and remove
+  package-manager caches in the same layer that creates them.</li>
+<li>Run the application as a non-root user, and document any writable directories
+  it needs.</li>
+<li>Define an <code>ENTRYPOINT</code> that runs the application, so that
+  <code>docker run &lt;image&gt; --help</code> behaves as users expect.</li>
+<li>Add <a href="https://github.com/opencontainers/image-spec/blob/main/annotations.md">OCI image labels</a>
+  such as <code>org.opencontainers.image.source</code>, <code>.version</code>, <code>.revision</code>,
+  <code>.licenses</code> and <code>.description</code>. These make an image traceable back to the
+  exact commit that produced it.</li>
+<li>Keep large data, model weights and test datasets out of the image where
+  possible; download or mount them at run time and document how.</li>
+</ul>
+<p>Graphical applications, such as <a href="https://napari.org/">napari</a> plugins, need
+additional consideration: the container must be able to reach a display server,
+either through the host's X11 socket or through a browser-based server such as
+Xpra. For X server access with Docker, make sure the DISPLAY environmental variable is set and host display drivers are mounted at runtime —
+example docker commands can be found in the <a href="https://rosalindfranklininstitute.github.io/volume-em-container-documentation/">RFI vEM container documentation</a>. See <a href="../muvis-align/#interactive-interface-with-xpra-container"><code>muvis-align</code></a>
+for a worked example of a napari image with an Xpra-enabled variant.</p>
+<h3 id="build-and-test-in-continuous-integration">Build and test in continuous integration</h3>
+<p>A container image can be built and tested in a continuous integration workflow,
+which ensures the definition keeps working as dependencies change. At minimum,
+build the image on pull requests and on release tags, and check that it starts
+and reports its version without error.</p>
+<p>For containerised research software we recommend:</p>
+<ul>
+<li>Building on every change to the container definition or dependency
+  specification, and on a schedule to detect breakage caused by upstream
+  updates.</li>
+<li>Running the test suite inside the built image, using a virtual display server
+  such as <code>Xvfb</code> where a GUI is involved.</li>
+<li>Adding start-up or installation checks to the entrypoint, which warn the user
+  when the runtime environment lacks something the application needs, such as a
+  display, GPU access or a writable bind mount.</li>
+<li>Building for the architectures you intend to support, for example <code>amd64</code> and
+  <code>arm64</code>, and testing each one.</li>
+</ul>
+<p>See <a href="../container_testing/">Container Testing</a> for a fuller discussion and
+examples, including the start-up tests written for the napari Empanada plugin.</p>
+<h3 id="tag-and-publish">Tag and publish</h3>
+<p>A container image can be built, properly tagged, and published to a public
+registry such as <a href="https://hub.docker.com/">Docker Hub</a>,
+<a href="https://quay.io/">Quay.io</a> or the
+<a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GitHub Container Registry</a>.
+Consider where your user community already looks for images, whether the
+registry applies pull-rate limits or retention policies, and whether it will
+still be available in several years.</p>
+<p>The tags follow the same guidelines as release versioning. Likewise, a specific
+tag can be referenced for reproducibility. A practical tagging scheme is:</p>
+<ul>
+<li>an immutable version tag matching the Git tag, for example <code>v1.2.0</code>, published
+  once and never moved;</li>
+<li>optional moving tags such as <code>v1.2</code>, <code>v1</code> or <code>latest</code> for convenience;</li>
+<li>variant suffixes where several images are built from the same release, for
+  example <code>v1.2.0-cuda</code> or <code>v1.2.0-xpra</code>.</li>
+</ul>
+<p>Publish the image from the same tag as the corresponding
+<a href="#create-a-release">GitHub Release</a>, and record the version in the image labels.
+Where the registry supports it, generate build provenance and a software bill of
+materials, so users can verify what an image contains and where it came from.</p>
+<p>Automate publishing from CI using the registry's OpenID Connect or short-lived
+credentials where available, rather than storing long-lived registry passwords in
+repository secrets, and restrict the publishing job to protected tags or a
+protected release environment.</p>
+<h3 id="document-how-to-run-the-image">Document how to run the image</h3>
+<p>Include the container definition in the repository and provide instructions for
+users to run it. Give a complete command that a new user can copy, and explain
+each option that is not obvious:</p>
+<div class="highlight"><pre><span></span><code><span class="go">docker pull ghcr.io/your-org/your-tool:1.2.0</span>
+<span class="go">docker run --rm -v /path/to/data:/data ghcr.io/your-org/your-tool:1.2.0 --help</span>
+</code></pre></div>
+<p>Document, as applicable:</p>
+<ul>
+<li>how to mount input and output data, and which paths the image expects;</li>
+<li>how to request GPU access, for example <code>--gpus all</code>, and which driver and
+  CUDA versions are required;</li>
+<li>how to run a graphical interface, including any <code>DISPLAY</code> or X11 socket
+  settings;</li>
+<li>the user and file-permission behaviour, for example <code>--user $(id -u):$(id -g)</code>
+  when written files should be owned by the invoking user;</li>
+<li>resource expectations, such as memory, shared memory or disk space for large
+  volumes.</li>
+</ul>
+<h3 id="shared-infrastructure-and-archiving">Shared infrastructure and archiving</h3>
+<p>Many users run analyses on HPC clusters, where Docker is usually unavailable
+because it requires elevated privileges. Container runtimes such as
+<a href="https://apptainer.org/">Apptainer</a> (formerly Singularity) are commonly
+installed instead, and can convert and run a published OCI image directly:</p>
+<div class="highlight"><pre><span></span><code><span class="go">apptainer pull your-tool_1.2.0.sif docker://ghcr.io/your-org/your-tool:1.2.0</span>
+<span class="go">apptainer run --bind /path/to/data:/data your-tool_1.2.0.sif --help</span>
+</code></pre></div>
+<p>Test this route if you expect cluster use, since bind-mount behaviour, the home
+directory, environment variables and the container user differ from Docker.</p>
+<p>For work that must remain reproducible in the long term, reference images by
+digest rather than by tag, since a digest identifies exact image content:</p>
+<div class="highlight"><pre><span></span><code><span class="go">docker run --rm your-tool@sha256:&lt;digest&gt;</span>
+</code></pre></div>
+<p>Registries are not archives. Where a published analysis depends on a specific
+image, record its digest in the methods or workflow description, and consider
+depositing the container definition, the resolved dependency versions and, if
+size permits, an exported image archive alongside the release in a research
+archive such as <a href="https://zenodo.org/">Zenodo</a>. A container definition that can
+be rebuilt from pinned inputs is often more durable than a stored image.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
