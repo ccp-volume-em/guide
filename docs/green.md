@@ -57,7 +57,7 @@ Dataset and operation:
 
 * Operation: stitching of 2D tiles and low resolution overviews: registration and fusion to OME-Zarr format
 * Improved efficiency of the registration and fusion process resulting in reduced energy consumption and faster processing times
-* Lowerer node memory (160 GB instead of 640 GB)
+* Lower node memory
 * Source data:
   * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
   * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
@@ -66,24 +66,35 @@ Dataset and operation:
 
 GA4HPC results:
 
+* Total processing wallclock time: 18.3 hours
+* Memory: 640 GB
 * Energy used: 7.97 kWh
 * CPU: 14 days 10:26:19 (346 hours)
-* Total wallclock time: 0 days 23:29:11
 * 1 kgCO2e
 
 GA4HPC results of improved registration and fusion process:
 
+* Total processing wallclock time: 8.5 hours
+* Memory: 640 GB
 * Energy used: 3.10 kWh
 * CPU: 6 days 19:00:31 (163 hours)
-* Total wallclock time: 0 days 08:36:37
 * 424 gCO2e
 
-GA4HPC results of improved registration and fusion process & lower memory (160 GB):
+GA4HPC results of improved registration and fusion process & lower memory:
 
+* Total processing wallclock time: 8.1 hours
+* Memory: 160 GB
 * Energy used: 1.47 kWh
 * CPU: 6 days 12:48:00 (157 hours)
-* Total wallclock time: 0 days 10:31:04
 * 201 gCO2e
+
+GA4HPC results of further improvements & even lower memory:
+
+* Total processing wallclock time: 8.4 hours
+* Memory: 64 GB
+* Energy used: 1.34 kWh
+* CPU: 7 days 15:29:04 (183 hours)
+* 183 gCO2e
 
 ___
 
