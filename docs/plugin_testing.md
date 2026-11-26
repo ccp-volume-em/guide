@@ -263,14 +263,16 @@ jobs:
           PLATFORM: ${{ matrix.platform }}
         run: python -m pytest -s -vv tests --ignore=tests/test_install.py
 ```
+
 An complete introduction to Workflows can be found on the [GitHub Actions
 documentation](https://docs.github.com/en/actions/concepts/workflows-and-actions/workflows).
 Here we note a few key features:
+
 - the workflow is specified to run on `push` to *any* branch, but many other
   'trigger' events are possible (push to `main` / PR merger is common for build
-steps)
-- the job consists of a number of `steps`, several of which use 
-GitHub *Actions* that provide pre-defined functionality in one convenient call 
+  steps)
+- the job consists of a number of `steps`, several of which use
+  GitHub *Actions* that provide pre-defined functionality in one convenient call
 - the pipeline builds the package locally (with `[test]` dependencies), and runs
   all but a set of installation tests (these were designed for the container images)  
 
