@@ -31,7 +31,7 @@ nav:
 
 theme:
   name: material
-  logo: images/logo.png
+  logo: images/favicon.png
   favicon: images/favicon.png
   palette:
     - media: "(prefers-color-scheme)"
