@@ -59,8 +59,8 @@ Dataset and operation:
 * Improved efficiency of the registration and fusion process resulting in reduced energy consumption and faster processing times
 * Lower node memory
 * Source data:
-  * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
-  * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
+    * 32915 tiles of 4096 x 3072 x 8 bit (10 um pixel size OME-Tiff format)
+    * 1081 tiles of 4096 x 3072 x 8 bit (250 um pixel size OME-Tiff format)
 * Fused data shape: 169114 x 147520 x 1081 x 8 bit = 24.5 TB
 * Resulting multi-size fused data: 950 GB
 
@@ -68,35 +68,35 @@ Dataset and operation:
 
 1. GA4HPC results:
 
-* Total processing wallclock time: 18.3 hours
-* Memory: 640 GB
-* Energy used: 7.97 kWh
-* CPU: 14 days 10:26:19 (346 hours)
-* 1 kgCO2e
+    * Total processing wallclock time: 18.3 hours
+    * Memory: 640 GB
+    * Energy used: 7.97 kWh
+    * CPU: 14 days 10:26:19 (346 hours)
+    * 1 kgCO2e
 
 2. GA4HPC results of improved registration and fusion process:
 
-* **Total processing wallclock time: 8.5 hours**
-* Memory: 640 GB
-* Energy used: 3.10 kWh
-* **CPU: 6 days 19:00:31 (163 hours)**
-* **424 gCO2e**
+    * **Total processing wallclock time: 8.5 hours**
+    * Memory: 640 GB
+    * Energy used: 3.10 kWh
+    * **CPU: 6 days 19:00:31 (163 hours)**
+    * **424 gCO2e**
 
 3. GA4HPC results of improved registration and fusion process & lower memory:
 
-* Total processing wallclock time: 8.1 hours
-* **Memory: 160 GB**
-* Energy used: 1.47 kWh
-* CPU: 6 days 12:48:00 (157 hours)
-* **201 gCO2e**
+    * Total processing wallclock time: 8.1 hours
+    * **Memory: 160 GB**
+    * Energy used: 1.47 kWh
+    * CPU: 6 days 12:48:00 (157 hours)
+    * **201 gCO2e**
 
 4. GA4HPC results of further improvements & even lower memory:
 
-* Total processing wallclock time: 8.4 hours
-* **Memory: 64 GB**
-* Energy used: 1.34 kWh
-* CPU: 7 days 15:29:04 (183 hours)
-* **183 gCO2e**
+    * Total processing wallclock time: 8.4 hours
+    * **Memory: 64 GB**
+    * Energy used: 1.34 kWh
+    * CPU: 7 days 15:29:04 (183 hours)
+    * **183 gCO2e**
 
 ___
 
