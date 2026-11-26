@@ -1,4 +1,4 @@
-## Container Testing
+# Container Testing
 *Note: This section is one topic in a larger discussion on best practices for
 containerising research software, to hopefully be included here in the future.
 For an introduction to containers in this context, we recommend reading 
